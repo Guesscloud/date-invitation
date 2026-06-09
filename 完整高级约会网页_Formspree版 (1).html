@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>浪漫约会邀请</title>
+<style>
+*{box-sizing:border-box}
+body{
+margin:0;font-family:"Microsoft YaHei",sans-serif;
+background:linear-gradient(135deg,#ffd6e7,#fff0f6);
+height:100vh;display:flex;justify-content:center;align-items:center;overflow:hidden;
+}
+.card{
+width:420px;max-width:94vw;background:#fff;
+border-radius:28px;padding:24px;text-align:center;
+box-shadow:0 12px 35px rgba(0,0,0,.15);
+position:relative;z-index:2;
+}
+.page{display:none}
+.show{display:block}
+h2{color:#e85d9b}
+.btn{
+padding:12px 24px;border:none;border-radius:999px;
+cursor:pointer;font-size:16px;margin:6px;
+}
+.yes{background:#ff5c9f;color:white}
+.no{background:#c9a1b5;color:white;position:relative}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.opt{
+padding:12px;border:2px solid #ffd0e2;border-radius:14px;
+cursor:pointer;background:#fff;
+}
+.sel{background:#ffdceb}
+input,textarea{
+width:95%;padding:10px;border-radius:10px;
+border:1px solid #ddd;margin:6px 0;
+}
+.heart{
+position:fixed;pointer-events:none;
+animation:float linear infinite;
+}
+@keyframes float{
+from{transform:translateY(110vh)}
+to{transform:translateY(-20vh)}
+}
+.success{
+font-size:18px;line-height:1.8
+}
+</style>
+</head>
+<body>
+
+<div class="card">
+
+<div id="p1" class="page show">
+<div style="font-size:80px">🥰</div>
+<h2>愿意和我一起约会吗？</h2>
+<p>这是一个认真发出的邀请 ❤️</p>
+<button class="btn yes" onclick="nextPage(2)">愿意</button>
+<button class="btn no" id="noBtn">不要</button>
+</div>
+
+<div id="p2" class="page">
+<h2>📅 选择日期与时间</h2>
+<input type="date" id="date"><br>
+<input type="time" id="time" value="18:00">
+<br><br>
+<button class="btn yes" onclick="goActivity()">下一步</button>
+</div>
+
+<div id="p3" class="page">
+<h2>💞 想一起做什么？</h2>
+<div class="grid">
+<div class="opt">🎬 看电影</div>
+<div class="opt">🍜 吃美食</div>
+<div class="opt">☕ 喝咖啡</div>
+<div class="opt">🌊 海边散步</div>
+<div class="opt">🎡 游乐园</div>
+<div class="opt">🌹 散步聊天</div>
+</div>
+<br>
+<button class="btn yes" onclick="goForm()">继续</button>
+</div>
+
+<div id="p4" class="page">
+<h2>💌 填写信息</h2>
+
+<form action="https://formspree.io/f/xgobkvdv" method="POST">
+
+<input type="hidden" name="约会日期" id="fd">
+<input type="hidden" name="约会时间" id="ft">
+<input type="hidden" name="约会项目" id="fa">
+
+<input type="text" name="姓名" placeholder="你的名字" required>
+<input type="text" name="微信号" placeholder="微信号（可选）">
+<textarea name="留言" rows="4" placeholder="想说的话..."></textarea>
+
+<input type="hidden" name="_subject" value="新的约会邀请回复">
+
+<button class="btn yes" type="submit">
+提交约会申请 ❤️
+</button>
+
+</form>
+
+<p style="font-size:12px;color:#888">
+提交后信息会发送到创建 Formspree 的账号
+</p>
+</div>
+
+</div>
+
+<script>
+for(let i=0;i<45;i++){
+const h=document.createElement('div');
+h.className='heart';
+h.innerHTML='💗';
+h.style.left=Math.random()*100+'vw';
+h.style.fontSize=(12+Math.random()*26)+'px';
+h.style.animationDuration=(4+Math.random()*7)+'s';
+document.body.appendChild(h);
+}
+
+const noBtn=document.getElementById('noBtn');
+
+function moveNo(){
+noBtn.style.position='fixed';
+noBtn.style.left=Math.random()*(window.innerWidth-120)+'px';
+noBtn.style.top=Math.random()*(window.innerHeight-80)+'px';
+}
+
+noBtn.addEventListener('mouseover',moveNo);
+noBtn.addEventListener('click',moveNo);
+
+let activity='';
+
+document.querySelectorAll('.opt').forEach(el=>{
+el.onclick=()=>{
+document.querySelectorAll('.opt').forEach(x=>x.classList.remove('sel'));
+el.classList.add('sel');
+activity=el.innerText;
+}
+});
+
+function nextPage(n){
+document.querySelectorAll('.page').forEach(p=>p.classList.remove('show'));
+document.getElementById('p'+n).classList.add('show');
+}
+
+function goActivity(){
+if(!document.getElementById('date').value){
+alert('请选择日期');
+return;
+}
+nextPage(3);
+}
+
+function goForm(){
+if(!activity){
+alert('请选择活动');
+return;
+}
+
+document.getElementById('fd').value=document.getElementById('date').value;
+document.getElementById('ft').value=document.getElementById('time').value;
+document.getElementById('fa').value=activity;
+
+nextPage(4);
+}
+</script>
+
+</body>
+</html>
